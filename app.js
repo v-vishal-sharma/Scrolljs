@@ -62,6 +62,7 @@ const scrollLinks = document.querySelectorAll('.scroll-link');
 
 scrollLinks.forEach(function(link){
     link.addEventListener('click', function(e) {
+        // prevent scroll
         e.preventDefault();
 
         // navigate to specific spot
@@ -69,14 +70,28 @@ scrollLinks.forEach(function(link){
         // console.log(id);
 
         const element = document.getElementById(id);
+
+        // calculate the heights
+        const navHeight = navbar.getBoundingClientRect().height;
+        const containerHeight = linksConatiner.getBoundingClientRect().height;
+        const fixedNav = navbar.classList.contains('fixed-nav');
         
-        let position = element.offsetTop;
+        let position = element.offsetTop - navHeight;
+
+        if (!fixedNav) {
+            position = position - navHeight;
+        }
+        if(navHeight > 82){
+            position = position + containerHeight;
+        }
+
         window.scrollTo({
             left:0,
             top: position,
         });
 
+        // closes hamburger menu after clicking a link
         linksConatiner.style.height = 0;
 
-    })
-})
+    });
+});
